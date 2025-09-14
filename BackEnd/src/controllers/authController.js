@@ -6,17 +6,29 @@ import path from "path";
 const handleErrors = (err) => {
     let errors = { username: "", email: "", password: "" };
 
+    // incorrect email
+    if ( err.message === "Incorrect Email" ) {
+        errors.email = "That email is not registered";
+        return errors;
+    }
+
+    // incorrect password
+    if ( err.message === "Incorrect Password" ) {
+        errors.password = "Incorrect Password";
+        return errors;
+    }
+
     // Duplicate Error Code
-    if ( err.code ===  11000) {
+    if (err.code === 11000) {
         errors.email = "That email is already registered";
         return errors;
     }
 
     // Validation Errors
-    if ( err.message.includes("User validation failed") ) {
-        Object.values(err.errors).forEach( ({properties}) => {
+    if (err.message.includes("User validation failed")) {
+        Object.values(err.errors).forEach(({ properties }) => {
             errors[properties.path] = properties.message;
-        } )
+        })
     };
 
     return errors;
@@ -27,7 +39,7 @@ const maxAge = 3 * 24 * 60 * 60;
 
 // Create Token
 const createToken = (id) => {
-    return jwt.sign( { id }, "Abdelilah_Developer_Secret_Key", { expiresIn: maxAge } );
+    return jwt.sign({ id }, "Abdelilah_Developer_Secret_Key", { expiresIn: maxAge });
 }
 
 export const signUp_get = (req, res) => {
@@ -40,7 +52,7 @@ export const signUp_post = async (req, res) => {
         const user = await User.create({ username, email, password });
 
         // Create Token
-        const token = createToken( user._id );
+        const token = createToken(user._id);
         console.log(token)
         res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
 
@@ -55,12 +67,21 @@ export const login_get = (req, res) => {
     res.sendFile(path.join(path.resolve(), 'src/views', 'login.html'));
 };
 
+export const cars_get = (req, res) => {
+    res.sendFile(path.join(path.resolve(), 'src/views', 'carsSpecification.html'));
+};
+
 export const login_post = async (req, res) => {
-    const { email, password } = req.body;
-    const user = await User.login(email, password);
-    if ( user ) {
+    try {
+        const { email, password } = req.body;
+        const user = await User.login(email, password);
+
+        // Create Token
+        const token = createToken(user._id);
+        res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
         res.status(200).json({ user: user._id })
-    } else {
-        res.status(400).json({ errors: "Incorrect Email or Password" });
+    } catch (error) {
+        const errors = handleErrors(error);
+        res.status(400).json({ errors });
     }
 };

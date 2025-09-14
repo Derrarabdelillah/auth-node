@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cars Specification</title>
+</head>
+
+<body>
+    <h1>Cars Specification</h1>
+    <form>
+        <label for="make">Make:</label>
+        <input type="text" id="make" name="make" required><br><br>
+        <label for="model">Model:</label>
+        <input type="text" id="model" name="model" required><br><br>
+        <label for="year">Year:</label>
+        <input type="number" id="year" name="year" required><br><br>
+        <label for="transmission">Transmission:</label>
+        <select id="transmission" name="transmission" required>
+            <option value="">Select</option>
+            <option value="automatic">Automatic</option>
+            <option value="manual">Manual</option>
+        </select><br><br>
+        <label for="fuelType">Fuel Type:</label>
+        <select id="fuelType" name="fuelType" required>
+            <option value="">Select</option>
+            <option value="petrol">Petrol</option>
+            <option value="diesel">Diesel</option>
+        </select><br><br>
+        <label for="color">Color:</label>
+        <input type="text" id="color" name="color" required><br><br>
+        <input type="submit" value="Submit">
+    </form>
+</body>
+
+</html>

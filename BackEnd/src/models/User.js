@@ -48,9 +48,9 @@ UserSchema.statics.login = async function (email, password) {
         if ( auth ) {
             return user;
         }
-        throw new Error("Incorrect password");
+        throw Error("Incorrect Password");
     }
-    throw new Error("Incorrect Email");
+    throw Error("Incorrect Email");
 }
 
 // User Model

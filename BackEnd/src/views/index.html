@@ -107,6 +107,7 @@
 
                 const data = await res.json();
                 if (res.status === 201) {
+                    document.location.href = '/api/auth/login';
                     alert('User registered successfully!');
                 } else {
                     console.log(data.errors)
