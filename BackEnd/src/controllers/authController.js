@@ -1,5 +1,6 @@
 import { User } from "../models/User.js";
 import jwt from "jsonwebtoken";
+import path from "path";
 
 // Handle Errors
 const handleErrors = (err) => {
@@ -26,11 +27,11 @@ const maxAge = 3 * 24 * 60 * 60;
 
 // Create Token
 const createToken = (id) => {
-    return jwt.sign( { id }, "Abdelilah Developer Secret Key", { expiresIn: maxAge } );
+    return jwt.sign( { id }, "Abdelilah_Developer_Secret_Key", { expiresIn: maxAge } );
 }
 
 export const signUp_get = (req, res) => {
-    res.send("Sign Up ROute")
+    res.sendFile(path.join(path.resolve(), 'src/views', 'index.html'));
 };
 
 export const signUp_post = async (req, res) => {
@@ -51,9 +52,15 @@ export const signUp_post = async (req, res) => {
 };
 
 export const login_get = (req, res) => {
-    res.send('Login GET route');
+    res.sendFile(path.join(path.resolve(), 'src/views', 'login.html'));
 };
 
 export const login_post = async (req, res) => {
-    res.send('Login Post route');
+    const { email, password } = req.body;
+    const user = await User.login(email, password);
+    if ( user ) {
+        res.status(200).json({ user: user._id })
+    } else {
+        res.status(400).json({ errors: "Incorrect Email or Password" });
+    }
 };

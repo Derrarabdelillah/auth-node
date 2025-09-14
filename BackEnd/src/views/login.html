@@ -2,9 +2,10 @@
 <html lang="en">
 
 <head>
+    <!-- Login Page -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign Up</title>
+    <title>Login Page</title>
 </head>
 
 <body>
@@ -63,15 +64,10 @@
         }
     </style>
 
-    <!-- Full Sign Up Form -->
+    <!-- Full Login Form -->
     <form>
-        <label for="username">Username:</label>
-        <input type="text" name="username" id="username" required><br>
-
-        <!-- Username error -->
-        <div id="username-error" style="color: red; margin: 10px 0;"></div>
-        <label for="text">Email:</label>
-        <input type="text" name="email" id="email" required><br>
+        <label for="email">Email:</label>
+        <input type="email" name="email" id="email" required><br>
 
         <!-- Email error -->
         <div id="email-error" style="color: red; margin: 10px 0;"></div>
@@ -80,40 +76,36 @@
 
         <!-- Password error -->
         <div id="password-error" style="color: red; margin: 10px 0;"></div>
-        <input type="submit" value="Sign Up">
+        <input type="submit" value="Login">
     </form>
 
     <script>
-        // Handle form submission and send the data user to the server
+       // Handle form submission and send the data to the server
         document.querySelector('form').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const username = document.getElementById('username').value;
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
 
             // Clear previous errors
-            document.getElementById('username-error').textContent = '';
             document.getElementById('email-error').textContent = '';
             document.getElementById('password-error').textContent = '';
 
             try {
-                const res = await fetch('/api/auth/signup', {
+                const res = await fetch('/api/auth/login', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ username, email, password })
+                    body: JSON.stringify({ email, password })
                 });
 
                 const data = await res.json();
-                if (res.status === 201) {
-                    alert('User registered successfully!');
+                if (res.status === 200) {
+                    // Handle successful login
+                    alert('User logged in successfully!');
                 } else {
                     console.log(data.errors)
                     if (data.errors) {
-                        if (data.errors.username) {
-                            document.getElementById('username-error').textContent = data.errors.username;
-                        }
                         if (data.errors.email) {
                             document.getElementById('email-error').textContent = data.errors.email;
                         }
